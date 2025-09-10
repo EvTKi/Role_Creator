@@ -1,0 +1,34 @@
+[pyinstaller]
+script = "ui.py"
+name = "Конвертер CSV-RDF"
+onefile = true
+
+datas = [
+    { src = "config.json", dest = "." },
+    { src = "modules", dest = "modules" }
+]
+
+hiddenimports = [
+    "main",
+    "ui",
+    "modules.config_manager",
+    "modules.csv_processor",
+    "modules.csv_reader",
+    "modules.file_manager",
+    "modules.logger_manager",
+    "modules.xml_generator",
+    "PyQt5",
+    "PyQt5.QtWidgets",
+    "PyQt5.QtCore",
+    "PyQt5.QtGui",
+    "lxml",
+    "lxml.etree",
+    "lxml._elementpath",
+    "chardet",
+    "chardet.universaldetector"
+]
+
+paths = ["."]
+
+[build]
+name = "Конвертер CSV-RDF"

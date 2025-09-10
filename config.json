@@ -1,0 +1,40 @@
+{
+  "csv_processing": {
+    "required_fields": [
+      "org_name",
+      "shiftrole_name",
+      "shiftrole_uid"
+    ],
+    "model_version": "2025-03-04(11.7.1.7)",
+    "model_name": "Access",
+    "role_template": "ППС. {org_name}. {shiftrole_name}",
+    "datagroup_template": "{org_name}. {shiftrole_name}",
+    "default_delimiter": ";"
+  },
+  "xml_generation": {
+    "namespaces": {
+      "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+      "md": "http://iec.ch/TC57/61970-552/ModelDescription/1#",
+      "cim": "http://monitel.com/2021/schema-access#"
+    },
+    "me_namespace": "http://monitel.com/2014/schema-cim16#",
+    "fixed_resources": {
+      "role_parent_object": "#_0efa31f0-4a36-4a2e-9a35-1bc7fafc499a",
+      "datagroup_parent_object": "#_f02c26a7-df3d-43a7-9c61-46d382e31d2c",
+      "privilege_operation": "#_200006fe-0000-0000-c000-0000006d746c",
+      "dataitem_category": "#_200006ff-0000-0000-c000-0000006d746c",
+      "datagroup_class": "#_50000709-0000-0000-c000-0000006d746c"
+    }
+  },
+  "file_management": {
+    "exclude_files": [
+      "Sample.csv"
+    ],
+    "log_directory": "log"
+  },
+  "logging": {
+    "level": "DEBUG",
+    "format": "%(asctime)s [%(levelname)s]: %(message)s",
+    "date_format": "%Y-%m-%d %H:%M:%S"
+  }
+}

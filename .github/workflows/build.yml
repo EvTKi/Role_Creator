@@ -1,0 +1,86 @@
+name: 🏗️ Сборка .exe и релиз
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-exe:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ['3.11']
+
+    steps:
+      - name: 🔹 Checkout кода
+        uses: actions/checkout@v4
+
+      - name: 🔹 Установка Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: 🔹 Чтение версии из VERSION
+        id: version
+        run: |
+          $version = Get-Content -Path VERSION -Encoding UTF8 | ForEach-Object { $_.Trim() }
+          echo "RELEASE_VERSION=$version" >> $env:GITHUB_ENV
+          echo "TAG_NAME=v$version" >> $env:GITHUB_ENV
+        shell: pwsh
+
+      - name: 🔹 Извлечь заметки из CHANGELOG.md
+        id: changelog
+        run: |
+          $version = "${{ env.RELEASE_VERSION }}"
+          if (Test-Path CHANGELOG.md) {
+            $content = Get-Content -Path CHANGELOG.md -Raw -Encoding UTF8
+            $pattern = "(?s)(?<=^## \[$version\][^\n]*\n)(.*?)(?=\n## |\Z)"
+            $match = [regex]::Match($content, $pattern, "Multiline")
+            if ($match.Success) {
+              $notes = $match.Value.Trim()
+            } else {
+              $notes = "Заметки для версии $version не найдены."
+            }
+          } else {
+            $notes = "CHANGELOG.md не найден. Обновления не задокументированы."
+          }
+          $notes = $notes -replace '"', '\"' -replace '\$', '$$'
+          echo "RELEASE_NOTES<<EOF" >> $env:GITHUB_ENV
+          echo "$notes" >> $env:GITHUB_ENV
+          echo "EOF" >> $env:GITHUB_ENV
+        shell: pwsh
+
+      - name: 🔹 Установка зависимостей
+        run: |
+          pip install pyinstaller toml PyQt5 lxml chardet
+
+      - name: 🔹 Сборка через build.py
+        run: |
+          python build-tools/build.py
+        shell: pwsh
+
+      - name: 🔹 Создать релиз
+        uses: softprops/action-gh-release@v2
+        if: success()
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          name: Выпуск ${{ env.TAG_NAME }}
+          body: |
+            ### 📦 Что нового
+
+            ${{ env.RELEASE_NOTES }}
+
+            ### 📦 Что включено
+
+            - `Конвертер CSV-RDF.exe` — основная программа
+            - `config.json` — конфигурация
+
+            Распакуйте архив и запустите `.exe`.
+
+            Версия: ${{ env.RELEASE_VERSION }}
+          draft: false
+          prerelease: false
+          files: dist/*.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

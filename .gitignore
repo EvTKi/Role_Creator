@@ -1,0 +1,8 @@
+*.xml
+*.csv
+!Sample.csv
+/log
+/dist
+/build
+
+__pycache__
