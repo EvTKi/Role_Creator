@@ -20,7 +20,7 @@
     "me_namespace": "http://monitel.com/2014/schema-cim16#",
     "fixed_resources": {
       "role_parent_object": "#_0efa31f0-4a36-4a2e-9a35-1bc7fafc499a",
-      "datagroup_parent_object": "#_f02c26a7-df3d-43a7-9c61-46d382e31d2c",
+      "datagroup_parent_object": "#_50000709-0000-0000-C000-0000006D746C",
       "privilege_operation": "#_200006fe-0000-0000-c000-0000006d746c",
       "dataitem_category": "#_200006ff-0000-0000-c000-0000006d746c",
       "datagroup_class": "#_50000709-0000-0000-c000-0000006d746c"
