@@ -4,5 +4,5 @@
 /log
 /dist
 /build
-
+.spec
 __pycache__
